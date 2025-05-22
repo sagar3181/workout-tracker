@@ -21,6 +21,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// test route directly
+const verifyToken = require("./middleware/verifyToken");
+
+app.get("/api/secret", verifyToken, (req, res) => {
+  res.json({ msg: `You unlocked the secret, user ID: ${req.user}` });
+});
+
 // 🔍 Log all incoming requests
 app.use((req, res, next) => {
   console.log(`👉 Incoming request: ${req.method} ${req.url}`);
@@ -70,9 +77,18 @@ app.listen(PORT, () => {
   }
 });
 
+// workout routes
+const workoutRoutes = require("./routes/workoutRoutes");
+app.use("/api/workouts", workoutRoutes);
+
+// workout plan
+const planRoutes = require("./routes/planRoutes");
+app.use("/api/plans", planRoutes);
 
 // 🔚 Catch unmatched routes
 app.use("*", (req, res) => {
   console.log("❌ Unmatched route hit:", req.originalUrl);
   res.status(404).json({ msg: "Route not found" });
 });
+
+
