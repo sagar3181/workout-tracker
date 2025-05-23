@@ -85,6 +85,11 @@ app.use("/api/workouts", workoutRoutes);
 const planRoutes = require("./routes/planRoutes");
 app.use("/api/plans", planRoutes);
 
+// workout name suggestions
+// const workoutRoutes = require("./routes/workoutRoutes");
+// app.use("/api/workouts", workoutRoutes);
+
+
 // 🔚 Catch unmatched routes
 app.use("*", (req, res) => {
   console.log("❌ Unmatched route hit:", req.originalUrl);

@@ -67,6 +67,16 @@ router.get("/progress", verifyToken, async (req, res) => {
   }
 });
 
+// 👉 GET /api/workouts/exercises - Get list of unique exercise names used by user
+router.get("/exercises", verifyToken, async (req, res) => {
+  try {
+    const logs = await WorkoutLog.find({ user: req.user }).select("exercise");
+    const unique = [...new Set(logs.map(log => log.exercise))];
+    res.json(unique);
+  } catch (err) {
+    res.status(500).json({ msg: "Failed to fetch exercises", error: err.message });
+  }
+});
 
 module.exports = router;
 
