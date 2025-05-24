@@ -78,6 +78,17 @@ router.get("/exercises", verifyToken, async (req, res) => {
   }
 });
 
+// GET /api/workouts/splits - fetch all splits for a user
+router.get('/splits', verifyToken, async (req, res) => {
+  try {
+    const splits = await WorkoutSplit.find({ user: req.user });
+    res.json(splits);
+  } catch (err) {
+    console.error('Failed to fetch splits:', err);
+    res.status(500).json({ msg: 'Server error fetching splits' });
+  }
+});
+
 module.exports = router;
 
 
