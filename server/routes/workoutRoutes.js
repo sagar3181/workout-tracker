@@ -7,15 +7,44 @@ const WorkoutSplit = require("../models/WorkoutSplit");
 const WorkoutLog = require("../models/WorkoutLog");
 
 // 👉 POST /api/workouts/split - Create a workout split
-router.post("/split", verifyToken, async (req, res) => {
+// router.post('/split', verifyToken, async (req, res) => {
+//   try {
+//     const { name } = req.body;
+//     if (!name) return res.status(400).json({ msg: "Split name required" });
+
+//     const newSplit = await WorkoutSplit.create({
+//       name,
+//       user: req.user, // ensure `req.user` is populated correctly
+//     });
+
+//     res.status(201).json(newSplit);
+//   } catch (err) {
+//     console.error("Split creation failed:", err);
+//     res.status(500).json({ msg: "Server error", error: err.message });
+//   }
+// });
+router.post('/split', verifyToken, async (req, res) => {
+  console.log("📥 POST /split received:");
+  console.log("🧠 req.user:", req.user);
+  console.log("📦 req.body:", req.body);
+
   try {
     const { name } = req.body;
-    const split = await WorkoutSplit.create({ user: req.user, name });
-    res.status(201).json(split);
+    if (!name) return res.status(400).json({ msg: "Name is required" });
+
+    const newSplit = await WorkoutSplit.create({
+      user: req.user,
+      name,
+    });
+
+    res.status(201).json(newSplit);
   } catch (err) {
-    res.status(500).json({ msg: "Failed to create split", error: err.message });
+    console.error("❌ Error creating split:", err);
+    res.status(500).json({ msg: "Server error", error: err.message });
   }
 });
+
+
 
 // 👉 POST /api/workouts/log - Log an exercise
 router.post("/log", verifyToken, async (req, res) => {
